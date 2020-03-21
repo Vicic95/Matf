@@ -1,0 +1,27 @@
+Zadatak 1:
+
+Napisati program koji demonstrira upotrebu signala. Program u beskonacnoj petlji motri na emitovanje signala SIGUSR1, SIGUSR2 i SIGTERM. Za prva dva potrebno je instalirati rukovaoce signalima (eng. signal handlers) koji broje koliko su se puta ovi signali desili (uvećati odgovarajući brojač u rukovaocu). SIGTERM obraditi rukovaocem koji ispisuje koliko se puta SIGUSR1 desio i zatim koliko puta se desio SIGUSR2 (tim redom 2 broja) i završava program exit code-om 0. Dakle, ukoliko je program primio 2 signala SIGUSR1 i 5 signala SIGUSR2 izlaz iz programa je 2 5, a exit code je 0.
+
+Zadatak 2
+
+Napisati program koji pokreće dete proces i u njemu komandu terminala stat za putanju prosleđenu kao argument komandne linije. Takođe, potrebno je preusmeriti standardni izlaz komande stat i obraditi ga tako da se u roditeljskom procesu ispise veličina fajla (jedan broj bez dodatnog ispisa). Na kraju ukoliko se komanda stat ne završi uspešno (proveriti exit code) ispisati Neuspeh iz roditeljskog procesa.
+
+Zadatak 3
+
+Napisati program koji koristi više niti da izračuna minimum matrice. Program kao argument komandne linije prima putanju do fajla gde se nalazi matrica. Prva dva broja u fajlu su broj redova matrice N i broj kolona matrice M, a nakon ova dva broja slede elementi matrice koji su realni brojevi (možete pretpostaviti da je ulaz ispravan). Potrebno je pokrenuti N niti tako da svaka nit obrađuje jedan red (računa minimum tog reda i ažurira globalni minimum ako je to potrebno). Koristiti muteks za sinhronizaciju. Ispisati vrednost minimuma matrice iz main() funkcije (jedan broj bez dodatnog teksta).
+
+Zadatak 4
+
+Napisati program koji kao argument komandne linije prima putanju do fajla i dva broja a i b. Prvi broj predstavlja udaljenje od početka fajla, a drugi je broj bajtova. U slučaju da sekcija fajla [a, a+b] nije zaključana ispisati na standardni izlaz unlocked, u slučaju da je zaključana da može da se čita, a ne može da se piše ispisati shared lock i na kraju ako je zaključana i za čitanje i za pisanje ispisati exclusive lock.
+
+Zadatak 5
+
+Napisati program koji kao argumente komandne linije prima putanje do objekta deljene memorije. Potrebno učitati strukturu:
+
+typedef struct {
+sem_t inDataReady;
+float array[ARRAY_MAX]; // ARRAY_MAX = 1024
+unsigned arrayLen;
+} OsInputData;
+
+i naći medijanu niza array (medijana je element sa indeksom N/2 u nerastuće sortiranom nizu). Dodatno, pre bilo kakvog obrade, potrebno je sačekati na semafor inDataReady (pretpostaviti da je ispravno inicijalizovan). Izračunatu medijanu ispisati na standardni ulaz. 
