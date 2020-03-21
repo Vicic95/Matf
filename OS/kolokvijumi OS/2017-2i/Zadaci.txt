@@ -1,0 +1,26 @@
+Zadatak 1:
+
+Napisati funkciju bool osIsPublicFile(const char *fpath); koja vraca true ako ostali korisnici (eng. others) imaju rw prava pristupa nad regularnim fajlom na putanji 'fpath'. Testirati ovu funkciju pozivom iz main-a. Kao argument komandne linije programa prima se putanja do fajla. Pozvati osIsPublicFile funkciju i ispisati true ili false u zavisnosti od rezultata koji funkcija vrati.
+
+Zadatak 2:
+
+Napisati funkciju void osMkPublicDir(const char *dname); koja pravi direktorijum 'dname' sa pravima pristupa 0777. Testirati ovu funkciju pozivom iz main-a. Kao argument komandne linije program prima ime direktorijuma koji treba napraviti i poziva osMkPublicDir funkciju. Nema potrebe za bilo kakvim ispisom.
+
+Zadatak 3:
+
+Napisati funkciju unsigned osNumOfDaysFileModified(const char *fpath); koja vraca pre koliko je dana zadnji put sadrzaj fajla promenjen u odnosu na dan kada se program pokrece (dakle ne moze se hardcode-ovati datum). Testirati ovu funkciju pozivom iz main-a. Kao argument komandne linije programa prima se putanja do fajla, pozvati ovu funkciju i ispisati broj dana.
+
+Zadatak 4:
+
+Napisati funkciju void osMoveFile(const char *srcPath, const char *destPath); koja pomera fajl sa putanje srcPath na putanju destPath (kao komanda terminala mv). Testirati ovu funkciju pozivom iz main-a. Kao argumenti programa primaju se trenutna putanja fajla i putanja na koju fajl treba da se pomeri (naravno pozvati osMoveFile iz main f-je). Nema potrebe za bilo kakvim ispisom.
+
+Zadatak 5:
+
+Uglaste zagrade u tekstu zadatka označavaju koji zadatak sa ovog kolokvijuma možete iskoristiti kopiranjem f-je koja je tamo implementirana.
+
+Napisati program koji sve regularne fajlove za koje ostali korisnici (eng. others) imaju rw prava pristupa [1] radi sledece:
+
+    ukoliko su modifikovani u zadnjih 30 dana [3] pomera ih [4] u odgovarajuci direktorijum
+    ukoliko nisu modifikovani u zadnjih 30 dana [3] brisu se
+
+Kao argumente komandne linije ovaj program prima putanju do direktorjuma u kome se rekurzivno traze navedeni fajlovi i naziv direktorijuma gde treba pomeriti spomenute fajlove. Potrebno je napraviti ovaj drugi direktorijum u koji se fajlovi pomeraju tako da ima prava pristupa 0777 [2].

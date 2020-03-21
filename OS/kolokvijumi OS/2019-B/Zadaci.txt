@@ -1,0 +1,19 @@
+Zadatak 1:
+
+Napisati program koji kao argument komandne linije prima dve putanje do fajlova. Ispisati naziv fajla koji je skorije modifikovan. U poslednjem pokretanju nepost označava da fajl ne postoji.
+
+Zadatak 2:
+
+Napisati program koji kao argument komandne linije dobija putanju do simboličkog linka. Ispisati da, ukoliko simbolički link i fajl na koji link pokazuje, imaju istog vlasnika i istu vlasničku grupu, inače ispisati ne.
+
+Zadatak 3:
+
+Napisati program koji dobija kao argumente komandne linije putanju do regularnog fajla i 2 broja p i n. Prvi broj p označava poziciju u fajlu, a drugi broj n broj bajtova. Potrebno je obrnuti redosled n karaktera u fajlu počevši od pozicije p. Zabranjeno korišćenje fprintf, fscanf, fgetc i sl.(fprintf i perror su dozvoljeni za ispise grešaka).
+
+Zadatak 4:
+
+Napisati program koji kao argument komandne linije prima dve putanje do fajlova. Potrebno je promeniti prava pristupa drugog fajla tako da vlasnik drugog fajla dobije ista prava kao grupa prvog fajla, grupa drugog fajla dobije ista prava kao ostali korisnici prvog fajla i na kraju ostali korisnici drugog fajla dobiju prava kao vlasnik prvog fajla. Ukoliko prvi ili drugi fajl ne postoje izvršavanje završiti sa exit kodom 1.
+
+Zadatak 5:
+
+Napisati program koji kao argument komandne linije prima putanju do direktorijuma koji je potrebno rekurzivno obići. Ispisati nazive svih regularnih fajlova koji se nalaze bilo gde u okviru poddirektorijuma čiji naziv počinje sa dir_. Ukoliko nije prosleđen ispravan broj argumenata komandne linije, ili putanja koja je prosleđena kao argument komandne linije ne postoji, ili prosleđena putanja nije putanja do direktorijuma završiti sa exit kodom 1. Zabranjeno korišćenje nftw i ftw funkcije (morate sami pisati obilazak).

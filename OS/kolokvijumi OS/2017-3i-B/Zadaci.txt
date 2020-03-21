@@ -1,0 +1,19 @@
+Zadatak 1:
+
+Napisati program koji za prosleđenu putanju do regularnog fajla ispisuje razliku vremena poslednjeg pristupa i vremena modifikacije za taj fajl (razliku u danima).
+
+Zadatak 2:
+
+Napisati program koji prima 2 argumenta, putanju do fajla i KB, MB ili GB. U zavisnosti od druge opcije, program treba da ispiše ime fajla i veličinu fajla u kilobajtima, megabajtima ili gigabajtima respektivno (zaokruživati na veću vrednost). Kilobajt ima 1024 bajta (2¹⁰), megabajt 2²⁰ bajtova, a gigabajt 2³⁰ bajtova.
+
+Zadatak 3:
+
+Programu se prosleđuju tri argumenta. Prvi je tip fajla (-d za direktorijum, -f za reg. fajl), drugi je putanja, a treći prava pristupa oktalno. Program treba na prosleđenoj putanji da kreira fajl navedenog tipa sa navedenim pravima pristupa. Ako fajl (i direktorijum je fajl) već postoji, završiti sa exit code-om 1. 
+
+Zadatak 4:
+
+Napisati program koji prima tri argumenta. Prvi argument je putanja do regularnog fajla. Druga dva argumenta su offset u fajlu i dužina. Potrebno je na standardni izlaz ispisati tekst koji se nalazi u fajlu počevši od pozicije offset. Ispisati dužina karaktera. Možete pretpostaviti da su dužina i offset pozitivni celi brojevi. Zabranjena je upotreba standardne biblioteke za ulaz i izlaz (0 poena na zadatku).
+
+Zadatak 5:
+
+Napisati program koji prima putanju do direktorijuma i ekstenziju fajla, rekurzivno obilazi direktorijum i na standardni izlaz ispisuje broj regularnih fajlova sa zadatom ekstenzijom. Zabranjeno je korišćenje nftw() i ftw() funkcije (morate sami pisati obilazak).

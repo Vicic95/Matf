@@ -1,0 +1,23 @@
+Zadatak 1:
+
+Napisati program koji za prosledjenu putanju do fajla ispisuje razliku izmedju vremena zadnjeg pristupa i vremena poslednjeg menjanja sadrzaja fajla. Razliku ispisati u satima zaokruzenu na vecu vrednost (0.2 sata je zapravo 1 sat, 2.3 sata je 3 sata itd.).
+
+Zadatak 2:
+
+Napisati program koji kao argumente komandne linije prima relativne putanje do direktorijuma. Za sve direktorijume za koje ostali korisnici nemaju nijednu privilegiju ispisati duzine apsolutnih putanja do tih direktorijuma. Ukoliko iz niza argumenata komandne linije neka od prosledjenih putanja ne postoji ili ne pokazuje na direktorijum zavrsiti sa exit code-om 1.
+
+Zadatak 3:
+
+Napisati program koji prima putanju do fajla i string oblika: (u|g|o)(+|-)(r|w|x). Neki primeri ovakvog stringa su: u+w, g-r, o+x i slicno. Prvo slovo oznacava korisnika, grupu ili ostale korisnike, + oznacava dodavanje privilegije, - oduzimanje privilegije i na kraju poslednje slovo oznacava da li se radi o pravu r citanja, w pisanja ili x izvrsavanja. Za prosledjene argumente komandne linije izvrsiti odgovarajucu operaciju.
+
+Zadatak 4:
+
+Napisati program koji prima kao argumente komande linije prima putanju do fajla i dva broja, nazovimo ih a i b. Na standardni izlaz ispisati sadrzaj fajla duzine b karaktera pocevsi od pozicije a u fajlu gledano od pocetka fajla. Zabranjeno koriscenje funkcija stdio biblioteke (fopen, fprintf, fscanf,...) za resavanje zadatka (dozvoljen je debug ispis na stderr fprintf-om).
+
+Zadatak 5:
+
+Napisati program koji prima putanju do direktorijuma i ekstenziju. Za sve regularne fajlove u ovom direktorijumu sa ekstenzijom koja odgovara argumentu komandne linije na dubini pretrage izmedju nivoa 2 i 5 ukljucujuci i te nivoe ispisati njihove nazive. Pretraga se vrsi unutar zadatog direktorijuma rekurzivno (dakle i u poddirektorijumima itd.). Ukoliko prosledjena putanja ne pokazuje na direktorijum ili je program pozvan sa pogresnim argumentima zavrsiti izvrsavanje sa exit code-om 1.
+
+Obavezno je koriscenje ugradjene nftw() funkcije!
+
+POMOC: Za nivoe pogledati sadrzaj struct FTW.

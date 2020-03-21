@@ -1,0 +1,25 @@
+Zadatak 1:
+
+Napisati program koji za prosleđenu putanju do regularnog fajla ili direktorijuma ispisuje tip fajla i prava pristupa u formatu čitljivom za korisnika.
+
+Zadatak 2:
+
+Napisati program koji za prosleđenu putanju do fajla ispisuje korisničko ime vlasnika i naziv vlasničke grupe za taj fajl.
+
+Zadatak 3:
+
+Programu se prosleđuju tri argumenta. Prvi je tip fajla (-d za direktorijum, -f za regularni fajl fajl), drugi je putanja, a treći prava pristupa oktalno. Program treba na prosleđenoj putanji da kreira fajl navedenog tipa sa navedenim pravima pristupa. Ako fajl već postoji, potrebno je da mu se promene prava pristupa bez menjanja sadržaja fajla (ili direktorijuma). 
+
+Zadatak 4:
+
+Napisati program koji prima dva argumenta. Prvi argument je operacija, a drugi je putanja do regularnog fajla. Operacija može biti -r za čitanje fajla, -w za pisanje u fajl (sadržaj fajla treba prebrisati) i -a za nadovezivanje sadržaja na fajl. Ako je operacija -r u pitanju, program kopira sadržaj fajla na standardni izlaz, ako su u pitanju operacije -w i -a program na odgovarajući način upisuje sadržaj standardnog ulaza u fajl na prosleđenoj putanji. Ukoliko fajl ne postoji pri opciji -w, napraviti ga. Zabranjena je upotreba standardne biblioteke za ulaz i izlaz (0 poena na zadatku).
+
+Zadatak 5
+
+Napisati program koji ispisuje ukupan broj fajlova u prosleđenom direktorijumu rekurzivno. Pored ukupnog broja fajlova program treba da izračuna i broj fajlova svakog od postojećih tipova. Ispis je u redosledu:
+regularni direktorijumi karakterski blokovski linkovi FIFO soketi ukupno.
+Koristiti nftw i obavezno postaviti flags argument na FTW_PHYS
+
+Zadatak 6
+
+Napisati program koji pomera regularne fajlove i direktorijume (ponaša se kao komanda terminala mv). Program prima 2 argumenta, prvi je originalna putanja, a drugi je putanja na koju treba pomeriti regularni fajl/direktorijum. Ukoliko originalna i nova putanja pokazuju na isti fajl završiti exit code-om 1.

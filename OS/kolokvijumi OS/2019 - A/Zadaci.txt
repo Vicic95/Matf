@@ -1,0 +1,19 @@
+Zadatak 1:
+Napisati program koji kao argument komandne linije prima putanju do fajla. Ukoliko je naziv vlasničke grupe fajla jednak nazivu vlasnika fajla ispisati da, inače ispisati ne.
+
+Zadatak 2:
+Napisati program koji kao argument komandne linije dobija putanju do simboličkog linka. Ispisati vreme modifikacije simboličkog linka u sekundama od Epohe (ne za fajl na koji link pokazuje već baš za simbolički link).
+
+Pomoć za testiranje ispravnosti zadatka: Link za testiranje možete napraviti iz terminala komandom: ln -s postojeći_fajl naziv_linka. Nakon pravljenja linka promenite sadržaj fajla da bi se vremena modifikacije razlikovala. Da dobijete sekunde od Epohe na osnovu datuma pokrenite npr.: date -d "2018-11-04 12:40:55.321567883" +%s
+
+Zadatak 3:
+Napisati program koji dobija kao argumente komandne linije putanju do regularnog fajla i 3 broja. Prva dva broja predstavljaju pozicije u fajlu (a i b), a treći broj predstavlja broj bajtova (n). Zameniti u fajlu tekst koji počinje od pozicije a sa tekstom koji počinje od pozicije b, i obrnuto, u dužini od n karaktera. Zabranjeno koristiti fprintf , fscanf , fgetc i sl. (za ispis grešaka je dozvoljen fprintf ).
+
+Zadatak 4:
+Napisati program koji kao argument komandne linije prima putanju do fajla. Potrebno je promeniti prava pristupa za fajl tako da vlasnik dobije prava pristupa koja je imala grupa, grupa dobije prava pristupa koje su imali ostali korisnici, a ostali korisnici dobiju prava pristupa koja je imao vlasnik.
+
+Zadatak 5:
+
+Napisati program koji kao argument komandne linije prima putanju do simboličkog linka. Potrebno je na standardni izlaz ispisati sadržaj linka (dakle ne sadržaj fajla na koji link pokazuje).
+
+Pomoć: pretražite u man strani za stat()/lstat() povezane sistemske pozive.
