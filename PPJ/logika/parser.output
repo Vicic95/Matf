@@ -1,0 +1,456 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Naredba '\n' Program
+    2        | Naredba '\n'
+
+    3 Naredba: E
+    4        | id_tok ':' '=' E
+    5        | head_tok
+    6        | tail_tok
+
+    7 E: E and_tok E
+    8  | E or_tok E
+    9  | E impl_tok E
+   10  | E ekv_tok E
+   11  | '!' E
+   12  | id_tok
+   13  | '(' E ')'
+   14  | '[' E ']'
+   15  | true_tok
+   16  | false_tok
+   17  | undef_tok
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '\n' (10) 1 2
+    '!' (33) 11
+    '(' (40) 13
+    ')' (41) 13
+    ':' (58) 4
+    '=' (61) 4
+    '[' (91) 14
+    ']' (93) 14
+    error (256)
+    and_tok (258) 7
+    or_tok (259) 8
+    impl_tok (260) 9
+    ekv_tok (261) 10
+    true_tok (262) 15
+    false_tok (263) 16
+    undef_tok (264) 17
+    head_tok (265) 5
+    tail_tok (266) 6
+    id_tok <str_type> (267) 4 12
+
+
+Nonterminals, with rules where they appear
+
+    $accept (21)
+        on left: 0
+    Program (22)
+        on left: 1 2
+        on right: 0 1
+    Naredba (23)
+        on left: 3 4 5 6
+        on right: 1 2
+    E <f_type> (24)
+        on left: 7 8 9 10 11 12 13 14 15 16 17
+        on right: 3 4 7 8 9 10 11 13 14
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    head_tok   shift, and go to state 5
+    tail_tok   shift, and go to state 6
+    id_tok     shift, and go to state 7
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    Program  go to state 10
+    Naredba  go to state 11
+    E        go to state 12
+
+
+State 1
+
+   11 E: '!' . E
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    id_tok     shift, and go to state 13
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    E  go to state 14
+
+
+State 2
+
+   15 E: true_tok .
+
+    $default  reduce using rule 15 (E)
+
+
+State 3
+
+   16 E: false_tok .
+
+    $default  reduce using rule 16 (E)
+
+
+State 4
+
+   17 E: undef_tok .
+
+    $default  reduce using rule 17 (E)
+
+
+State 5
+
+    5 Naredba: head_tok .
+
+    $default  reduce using rule 5 (Naredba)
+
+
+State 6
+
+    6 Naredba: tail_tok .
+
+    $default  reduce using rule 6 (Naredba)
+
+
+State 7
+
+    4 Naredba: id_tok . ':' '=' E
+   12 E: id_tok .
+
+    ':'  shift, and go to state 15
+
+    $default  reduce using rule 12 (E)
+
+
+State 8
+
+   13 E: '(' . E ')'
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    id_tok     shift, and go to state 13
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    E  go to state 16
+
+
+State 9
+
+   14 E: '[' . E ']'
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    id_tok     shift, and go to state 13
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    E  go to state 17
+
+
+State 10
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 18
+
+
+State 11
+
+    1 Program: Naredba . '\n' Program
+    2        | Naredba . '\n'
+
+    '\n'  shift, and go to state 19
+
+
+State 12
+
+    3 Naredba: E .
+    7 E: E . and_tok E
+    8  | E . or_tok E
+    9  | E . impl_tok E
+   10  | E . ekv_tok E
+
+    and_tok   shift, and go to state 20
+    or_tok    shift, and go to state 21
+    impl_tok  shift, and go to state 22
+    ekv_tok   shift, and go to state 23
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 13
+
+   12 E: id_tok .
+
+    $default  reduce using rule 12 (E)
+
+
+State 14
+
+    7 E: E . and_tok E
+    8  | E . or_tok E
+    9  | E . impl_tok E
+   10  | E . ekv_tok E
+   11  | '!' E .
+
+    and_tok   shift, and go to state 20
+    or_tok    shift, and go to state 21
+    impl_tok  shift, and go to state 22
+    ekv_tok   shift, and go to state 23
+
+    $default  reduce using rule 11 (E)
+
+
+State 15
+
+    4 Naredba: id_tok ':' . '=' E
+
+    '='  shift, and go to state 24
+
+
+State 16
+
+    7 E: E . and_tok E
+    8  | E . or_tok E
+    9  | E . impl_tok E
+   10  | E . ekv_tok E
+   13  | '(' E . ')'
+
+    and_tok   shift, and go to state 20
+    or_tok    shift, and go to state 21
+    impl_tok  shift, and go to state 22
+    ekv_tok   shift, and go to state 23
+    ')'       shift, and go to state 25
+
+
+State 17
+
+    7 E: E . and_tok E
+    8  | E . or_tok E
+    9  | E . impl_tok E
+   10  | E . ekv_tok E
+   14  | '[' E . ']'
+
+    and_tok   shift, and go to state 20
+    or_tok    shift, and go to state 21
+    impl_tok  shift, and go to state 22
+    ekv_tok   shift, and go to state 23
+    ']'       shift, and go to state 26
+
+
+State 18
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 19
+
+    1 Program: Naredba '\n' . Program
+    2        | Naredba '\n' .
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    head_tok   shift, and go to state 5
+    tail_tok   shift, and go to state 6
+    id_tok     shift, and go to state 7
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    $default  reduce using rule 2 (Program)
+
+    Program  go to state 27
+    Naredba  go to state 11
+    E        go to state 12
+
+
+State 20
+
+    7 E: E and_tok . E
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    id_tok     shift, and go to state 13
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    E  go to state 28
+
+
+State 21
+
+    8 E: E or_tok . E
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    id_tok     shift, and go to state 13
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    E  go to state 29
+
+
+State 22
+
+    9 E: E impl_tok . E
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    id_tok     shift, and go to state 13
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    E  go to state 30
+
+
+State 23
+
+   10 E: E ekv_tok . E
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    id_tok     shift, and go to state 13
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    E  go to state 31
+
+
+State 24
+
+    4 Naredba: id_tok ':' '=' . E
+
+    '!'        shift, and go to state 1
+    true_tok   shift, and go to state 2
+    false_tok  shift, and go to state 3
+    undef_tok  shift, and go to state 4
+    id_tok     shift, and go to state 13
+    '('        shift, and go to state 8
+    '['        shift, and go to state 9
+
+    E  go to state 32
+
+
+State 25
+
+   13 E: '(' E ')' .
+
+    $default  reduce using rule 13 (E)
+
+
+State 26
+
+   14 E: '[' E ']' .
+
+    $default  reduce using rule 14 (E)
+
+
+State 27
+
+    1 Program: Naredba '\n' Program .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 28
+
+    7 E: E . and_tok E
+    7  | E and_tok E .
+    8  | E . or_tok E
+    9  | E . impl_tok E
+   10  | E . ekv_tok E
+
+    or_tok    shift, and go to state 21
+    impl_tok  shift, and go to state 22
+    ekv_tok   shift, and go to state 23
+
+    $default  reduce using rule 7 (E)
+
+
+State 29
+
+    7 E: E . and_tok E
+    8  | E . or_tok E
+    8  | E or_tok E .
+    9  | E . impl_tok E
+   10  | E . ekv_tok E
+
+    impl_tok  shift, and go to state 22
+    ekv_tok   shift, and go to state 23
+
+    $default  reduce using rule 8 (E)
+
+
+State 30
+
+    7 E: E . and_tok E
+    8  | E . or_tok E
+    9  | E . impl_tok E
+    9  | E impl_tok E .
+   10  | E . ekv_tok E
+
+    ekv_tok  shift, and go to state 23
+
+    $default  reduce using rule 9 (E)
+
+
+State 31
+
+    7 E: E . and_tok E
+    8  | E . or_tok E
+    9  | E . impl_tok E
+   10  | E . ekv_tok E
+   10  | E ekv_tok E .
+
+    $default  reduce using rule 10 (E)
+
+
+State 32
+
+    4 Naredba: id_tok ':' '=' E .
+    7 E: E . and_tok E
+    8  | E . or_tok E
+    9  | E . impl_tok E
+   10  | E . ekv_tok E
+
+    and_tok   shift, and go to state 20
+    or_tok    shift, and go to state 21
+    impl_tok  shift, and go to state 22
+    ekv_tok   shift, and go to state 23
+
+    $default  reduce using rule 4 (Naredba)

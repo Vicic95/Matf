@@ -1,0 +1,164 @@
+%{
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <map>
+#include <vector>
+
+extern int yylex();
+
+void yyerror(std::string s) {
+    std::cerr << "Sintaksna greska " << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+std::map<std::string, std::string> tablica;
+%}
+
+%union {
+    int broj_type;
+    std::string* string_type;
+}
+
+%token print_token sort_token reverse_token length_token string_token upper_token lower_token substring_token concat_token eq_token
+%token <string_type> string_value_token id_token
+%token <broj_type> broj_token
+
+%type <string_type> E
+%left '+'
+%left '*'
+%%
+Program: Naredba ';' Program {}
+    | Naredba ';' {}
+    ;
+Naredba: string_token id_token '=' E {
+        auto it = tablica.find(*$2);
+        if(it == tablica.end()){
+            tablica[*$2] = *$4;
+            
+        }
+        else{
+            std::cerr << "Promenljiva je vec definisana " << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+    | string_token id_token {
+        tablica[*$2] = *(new std::string());
+    }
+    | print_token '(' E ')' {
+        std::cout << *$3 << std::endl;
+    
+    }
+    | reverse_token '(' id_token ')' {
+        std::string s = tablica[*$3];
+        unsigned n = s.length();
+        for(unsigned i=0; i<n/2; i++)
+            std::swap(s[i],s[n-i-1]);
+        tablica[*$3] = s;
+    }
+    | length_token '(' E ')' {
+        std::cout << $3->length() << std::endl;
+    }
+    | sort_token '(' id_token ')' {
+    
+        std::string s = tablica[*$3];
+        int n = s.length();
+        for(int i =0; i<n; i++)
+            for(int j = i; j<n; j++){
+                if(s[i] > s[j])
+                    std::swap(s[i],s[j]);
+            }
+        tablica[*$3] = s;
+    }
+    | upper_token '(' id_token ')' {
+        std::string s = tablica[*$3];
+        int n = s.length();
+        for(int i =0; i<n; i++)
+            s[i] = toupper(s[i]);
+        tablica[*$3] = s;
+    
+    }
+    | lower_token '(' id_token ')' {
+        std::string s = tablica[*$3];
+        int n = s.length();
+        for(int i =0; i<n; i++)
+            s[i] = tolower(s[i]);
+        tablica[*$3] = s;
+    
+    }
+    | substring_token '(' E ',' E ')' {
+        std::cout << ((*$3).find(*$5) ? "False" : "True" ) << std::endl;
+    
+    }
+    | id_token '=' E {
+        auto it = tablica.find(*$1);
+        if(it != tablica.end()){
+            tablica[*$1] = *$3;
+        
+        }
+        else {
+            std::cerr << "Promenljiva nije definisana " << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    
+    }
+    | id_token concat_token E {
+        auto it = tablica.find(*$1);
+        if( it != tablica.end()){
+            std::string s = tablica[*$1];
+            s = s + *$3;
+            tablica[*$1] = s;
+        
+        }
+        else{
+            std::cerr << "Promenljiva nije definisana " << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    
+    }
+    | E eq_token E {
+        std::cout << ((*$1) == (*$3) ? "True" : "Fakse") << std::endl;
+    
+    }
+    ;
+E: 
+    '(' E ')' { $$ = $2;}
+    | E '+' E {
+        std::string s = *$1 + *$3;
+        $$ = new std::string(s);
+
+    }
+    | E '*' broj_token {
+        std::string s = *$1;
+        std::string s1;
+        for(int i=0;i<$3;i++){
+            s1 = s1+s;
+        }
+        $$ = new std::string(s1);    
+    }
+    | id_token '[' broj_token ',' broj_token  ']' {
+        std::string s = tablica[*$1].substr($3,$5);
+        $$ = new std::string(s);
+    
+    }
+    | string_value_token {
+        $$ = new std::string(*$1);
+    }
+    | id_token {
+        auto it = tablica.find(*$1);
+        if(it == tablica.end()){
+            std::cerr << "Promenljiva nije definisana " << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        else{
+            $$ = new std::string(tablica[*$1]);
+        }
+    }
+    ;
+
+%%
+
+int main(){
+    yyparse();
+    return 0;
+
+}

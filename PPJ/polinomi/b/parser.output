@@ -1,0 +1,250 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Naredba '\n' Program
+    2        | Naredba '\n'
+
+    3 Naredba: polinom
+
+    4 polinom: '<' NizKoeficijenata '>'
+    5        | polinom '+' polinom
+    6        | polinom '-' polinom
+    7        | polinom '*' polinom
+    8        | '-' polinom
+
+    9 NizKoeficijenata: NizKoeficijenata ',' br_token
+   10                 | br_token
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '\n' (10) 1 2
+    '*' (42) 7
+    '+' (43) 5
+    ',' (44) 9
+    '-' (45) 6 8
+    '<' (60) 4
+    '>' (62) 4
+    error (256)
+    br_token <d_vrednost> (258) 9 10
+    UNMIN (259)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (12)
+        on left: 0
+    Program (13)
+        on left: 1 2
+        on right: 0 1
+    Naredba (14)
+        on left: 3
+        on right: 1 2
+    polinom <p_vrednost> (15)
+        on left: 4 5 6 7 8
+        on right: 3 5 6 7 8
+    NizKoeficijenata <p_vrednost> (16)
+        on left: 9 10
+        on right: 4 9
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    '-'  shift, and go to state 1
+    '<'  shift, and go to state 2
+
+    Program  go to state 3
+    Naredba  go to state 4
+    polinom  go to state 5
+
+
+State 1
+
+    8 polinom: '-' . polinom
+
+    '-'  shift, and go to state 1
+    '<'  shift, and go to state 2
+
+    polinom  go to state 6
+
+
+State 2
+
+    4 polinom: '<' . NizKoeficijenata '>'
+
+    br_token  shift, and go to state 7
+
+    NizKoeficijenata  go to state 8
+
+
+State 3
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 9
+
+
+State 4
+
+    1 Program: Naredba . '\n' Program
+    2        | Naredba . '\n'
+
+    '\n'  shift, and go to state 10
+
+
+State 5
+
+    3 Naredba: polinom .
+    5 polinom: polinom . '+' polinom
+    6        | polinom . '-' polinom
+    7        | polinom . '*' polinom
+
+    '+'  shift, and go to state 11
+    '-'  shift, and go to state 12
+    '*'  shift, and go to state 13
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 6
+
+    5 polinom: polinom . '+' polinom
+    6        | polinom . '-' polinom
+    7        | polinom . '*' polinom
+    8        | '-' polinom .
+
+    $default  reduce using rule 8 (polinom)
+
+
+State 7
+
+   10 NizKoeficijenata: br_token .
+
+    $default  reduce using rule 10 (NizKoeficijenata)
+
+
+State 8
+
+    4 polinom: '<' NizKoeficijenata . '>'
+    9 NizKoeficijenata: NizKoeficijenata . ',' br_token
+
+    '>'  shift, and go to state 14
+    ','  shift, and go to state 15
+
+
+State 9
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 10
+
+    1 Program: Naredba '\n' . Program
+    2        | Naredba '\n' .
+
+    '-'  shift, and go to state 1
+    '<'  shift, and go to state 2
+
+    $default  reduce using rule 2 (Program)
+
+    Program  go to state 16
+    Naredba  go to state 4
+    polinom  go to state 5
+
+
+State 11
+
+    5 polinom: polinom '+' . polinom
+
+    '-'  shift, and go to state 1
+    '<'  shift, and go to state 2
+
+    polinom  go to state 17
+
+
+State 12
+
+    6 polinom: polinom '-' . polinom
+
+    '-'  shift, and go to state 1
+    '<'  shift, and go to state 2
+
+    polinom  go to state 18
+
+
+State 13
+
+    7 polinom: polinom '*' . polinom
+
+    '-'  shift, and go to state 1
+    '<'  shift, and go to state 2
+
+    polinom  go to state 19
+
+
+State 14
+
+    4 polinom: '<' NizKoeficijenata '>' .
+
+    $default  reduce using rule 4 (polinom)
+
+
+State 15
+
+    9 NizKoeficijenata: NizKoeficijenata ',' . br_token
+
+    br_token  shift, and go to state 20
+
+
+State 16
+
+    1 Program: Naredba '\n' Program .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 17
+
+    5 polinom: polinom . '+' polinom
+    5        | polinom '+' polinom .
+    6        | polinom . '-' polinom
+    7        | polinom . '*' polinom
+
+    '*'  shift, and go to state 13
+
+    $default  reduce using rule 5 (polinom)
+
+
+State 18
+
+    5 polinom: polinom . '+' polinom
+    6        | polinom . '-' polinom
+    6        | polinom '-' polinom .
+    7        | polinom . '*' polinom
+
+    '*'  shift, and go to state 13
+
+    $default  reduce using rule 6 (polinom)
+
+
+State 19
+
+    5 polinom: polinom . '+' polinom
+    6        | polinom . '-' polinom
+    7        | polinom . '*' polinom
+    7        | polinom '*' polinom .
+
+    $default  reduce using rule 7 (polinom)
+
+
+State 20
+
+    9 NizKoeficijenata: NizKoeficijenata ',' br_token .
+
+    $default  reduce using rule 9 (NizKoeficijenata)

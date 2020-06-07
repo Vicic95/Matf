@@ -1,0 +1,103 @@
+%{
+#include <iostream>
+#include <map>
+#include <vector>
+#include "zadatak.hpp"
+
+extern int yylex();
+
+void yyerror(std::string s) {
+    std::cerr << "Sintaksna greska " << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+
+std::map<std::string, Kutija*> tablica;
+%}
+
+%union {
+    std::string* string_type;
+    int tezina_type;
+    double broj_type;
+    Kutija* kutija_type;
+}
+
+%token kutija_token ubaci_token prikazi_token puna_token prazna_token
+%token <broj_type> broj_token
+%token <string_type> id_token
+%token <tezina_type> tezina_token
+
+%type <kutija_type> E niz_brojeva
+
+%left '-'
+%%
+Program: Naredba ';' Program {}
+    | Naredba {}
+    
+Naredba: kutija_token id_token '(' tezina_token ')'  '=' E {
+        $7->zapremina($4);
+        tablica[*$2] = $7;
+    }
+    | kutija_token id_token '(' tezina_token ')' {
+        Kutija* k = new Kutija();
+        k->zapremina($4);
+        tablica[*$2] = k;
+    }
+    | puna_token '(' E')' {
+        if($3->puna())
+            std::cout << "True" << std::endl;
+        else
+            std::cout << "False" << std::endl;
+        
+    }
+    | prikazi_token '(' E ')' {
+        $3->stampaj();
+    }
+    | prazna_token '(' E ')' {
+        if($3->prazna())
+            std::cout << "True" << std::endl;
+        else
+            std::cout << "False" << std::endl;
+        
+    }
+    | id_token ubaci_token E {
+        tablica[*$1]->dodaj_skup(*$3);
+    }
+    | id_token ubaci_token broj_token {
+        tablica[*$1]->dodaj($3);
+    }
+    ;
+E: '[' niz_brojeva ']' { $$=$2;}
+    | E '-' E {
+        $$ = razlika(*$1,*$3);
+    }
+    | id_token {
+        auto it = tablica.find(*$1);
+        if(it == tablica.end()){
+                std::cout << "Promenljiva nije definisana" << std::endl;
+                exit(EXIT_FAILURE);
+        }
+        else
+            $$ = it->second;
+    }
+    ;
+niz_brojeva: niz_brojeva ',' broj_token {
+        $1->dodaj($3);
+		$$ = $1;
+    }
+    | niz_brojeva ',' tezina_token {
+        $1->dodaj($3);
+		$$ = $1;
+    }
+    | broj_token {
+        $$ = new Kutija($1);
+    }
+    | tezina_token {
+        $$ = new Kutija($1);
+    }
+    ;
+%%
+
+int main() {
+    yyparse();
+    return 0;
+}

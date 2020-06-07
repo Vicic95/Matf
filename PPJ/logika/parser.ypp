@@ -1,0 +1,107 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <map>
+#include "zadatak.hpp"
+
+extern int yylex();
+
+void yyerror(std::string s) {
+    std::cerr << "Sintaksna greska " << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+
+std::map<std::string, Logic> tablica;
+
+%}
+
+%union {
+    std::string* str_type;
+    Formula* f_type;
+    
+}
+
+%left '!'
+%left and_tok
+%left or_tok
+%left impl_tok
+%left ekv_tok
+
+%token and_tok or_tok impl_tok ekv_tok true_tok false_tok undef_tok head_tok tail_tok
+%token <str_type> id_tok
+%type <f_type> E
+
+%%
+Program: Naredba '\n' Program {}
+    | Naredba '\n' {}
+    ;
+Naredba: E {
+    std::cout << $1->str() << std::endl;
+    }
+    | id_tok ':' '=' E {
+        tablica[*$1] = $4->val();
+        delete $1;
+        
+    }
+    | head_tok {
+    
+    }
+    | tail_tok {
+    
+    }
+    ;
+E: E and_tok E {
+        $$ = new Formula($1->and_f(*$3));
+        delete $1;
+        delete $3;
+    }
+    | E or_tok E {
+        $$ = new Formula($1->or_f(*$3));
+        delete $1;
+        delete $3;
+    }
+    | E impl_tok E {
+        $$ = new Formula($1->impl(*$3));
+        delete $1;
+        delete $3;
+    }
+    | E ekv_tok E {
+        $$ = new Formula($1->ekv(*$3));
+        delete $1;
+        delete $3;
+    }
+    | '!' E {
+        $$ = new Formula($2->negacija());
+        delete $2;
+    }
+    | id_tok {
+        auto it = tablica.find(*$1);
+        if(it == tablica.end())
+            $$ = new Formula(undef_v);
+        else
+            $$ = new Formula(it->second);
+        delete $1;
+    }
+    | '(' E ')' {
+        $$ = $2;
+    }
+    | '[' E ']' {
+        $$ = $2;
+    }
+    | true_tok {
+        $$ = new Formula(true_v);
+    }
+    | false_tok {
+        $$ = new Formula(false_v);
+    }
+    | undef_tok {
+        $$ = new Formula(undef_v);
+    }
+    ;
+%%
+
+int main(){
+    yyparse();
+    
+    return 0;
+}

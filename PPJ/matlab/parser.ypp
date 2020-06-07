@@ -1,0 +1,109 @@
+%{
+#include <iostream>
+#include <map>
+#include <vector>
+
+#include "zadatak.hpp"
+
+extern int yylex();
+
+void yyerror(std::string s){
+    std::cout << "Greska. " << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+
+std::map<char, Matrica*> tablica;
+%}
+
+%union {
+    Matrica* matrica_type;
+    int broj_type;
+    std::vector<int>* m_vector_type;
+    char string_type;
+}
+
+%token disp_token size_token sabiranje_token mnozenje_token
+%token <broj_type> broj_token
+%token <string_type> id_token
+
+%type <matrica_type> E lista_vektora
+%type <m_vector_type> niz_brojeva vektor
+%left sabiranje_token
+%left mnozenje_token
+%%
+Program: Naredba '\n' Program {}
+    | Naredba '\n'{}
+    ;
+Naredba: disp_token '(' E ')' {
+        $3->stampaj();
+    }
+    | size_token '(' E ')' {
+        $3->velicina();
+    }
+    | id_token '=' E {
+        tablica[$1] = $3;
+    }
+    ;
+E: '[' lista_vektora ']' { $$=$2;   }
+    | E sabiranje_token E {
+        if(($1->getMatrica().size()) != ($3->getMatrica().size()))
+            std::cout << "Dimenzije se ne poklapaju" << std::endl;
+        else{
+            std::vector<std::vector<int>> m1 = $1->getMatrica();
+			std::vector<std::vector<int>> m2 = $3->getMatrica();
+			if (m1[0].size() != m2[0].size()){
+				std::cout << "Dimenzije se ne poklapaju" << std::endl;
+            }
+            else
+                $$ = sabiranje(*$1,*$3);
+        }
+        
+    }
+    | E mnozenje_token E {
+        if(($1->getMatrica().size()) != ($3->getMatrica().size()))
+            std::cout << "Dimenzije se ne poklapaju" << std::endl;
+        else{
+            std::vector<std::vector<int>> m1 = $1->getMatrica();
+			std::vector<std::vector<int>> m2 = $3->getMatrica();
+			if (m1[0].size() != m2[0].size()){
+				std::cout << "Dimenzije se ne poklapaju" << std::endl;
+            }
+            else
+                $$ = mnozenje(*$1,*$3);
+        }
+    }
+    | id_token {
+        auto it = tablica.find($1);
+        if(it == tablica.end())
+            yyerror("Promenljiva nije definisana");
+        $$ = tablica[$1];
+    }
+    ;
+lista_vektora:  lista_vektora ';' vektor {
+        $1->dodaj_vrstu(*$3);
+    }
+    | vektor {
+        Matrica* niz = new Matrica();
+		niz->dodaj_vrstu(*$1);
+		$$ = niz;
+		delete $1;
+        
+    }
+    ;
+vektor: '[' niz_brojeva ']' { $$ = $2;}
+    ;
+niz_brojeva: niz_brojeva ',' broj_token {
+        $$->push_back($3);
+    }
+    | broj_token {
+        $$ = new std::vector<int>();
+        $$->push_back($1);
+    }
+    ;
+
+%%
+
+int main(){
+    yyparse();
+    return 0;
+}

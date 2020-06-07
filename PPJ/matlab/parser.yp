@@ -1,0 +1,53 @@
+%{
+#include <iostream>
+#include <map>
+#include <vector>
+
+#include "zadatak.hpp"
+
+extern int yylex();
+
+void yyerror(std::string s){
+    std::cerr << "Sintaksna greska " << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+
+std::map<std::string, Matrica*> tablica;
+%}
+
+%%union {
+    Matrica* matrica_type;
+    int broj_type;
+    std::vector<int> vector_type;
+}
+
+%token disp_token size_token
+%token <broj_type> broj_token
+
+%type <matrica_type> E lista_vektora
+%type <vector_type> niz_brojeva broj
+
+%%
+Program: Naredba '\n' Program {}
+    | Naredba '\n'{}
+    ;
+Naredba: disp_token '(' E ')' {}
+    | size_token '(' E ')' {}
+    ;
+E: '[' lista_vektora ']' {}
+    ;
+lista_vektora: '[' lista_vektora ',' vektor ']' {}
+    | vektor {}
+    ;
+vektor: '[' niz_brojeva ']' {}
+    ;
+niz_brojeva: niz_brojeva ',' broj {}
+    | broj {}
+    ;
+
+%%
+
+int main(){
+    yyparse();
+    return 0;
+}

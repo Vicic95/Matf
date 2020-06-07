@@ -1,0 +1,4 @@
+print("Zdravo"+ " svima!");
+print(("p"*2+"j")*3);
+string s="Ispit"+" iz "+"ppj.";
+print(s + "\n" + s);

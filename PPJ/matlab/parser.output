@@ -1,0 +1,364 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Naredba '\n' Program
+    2        | Naredba '\n'
+
+    3 Naredba: disp_token '(' E ')'
+    4        | size_token '(' E ')'
+    5        | id_token '=' E
+
+    6 E: '[' lista_vektora ']'
+    7  | E sabiranje_token E
+    8  | E mnozenje_token E
+    9  | id_token
+
+   10 lista_vektora: lista_vektora ';' vektor
+   11              | vektor
+
+   12 vektor: '[' niz_brojeva ']'
+
+   13 niz_brojeva: niz_brojeva ',' broj_token
+   14            | broj_token
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '\n' (10) 1 2
+    '(' (40) 3 4
+    ')' (41) 3 4
+    ',' (44) 13
+    ';' (59) 10
+    '=' (61) 5
+    '[' (91) 6 12
+    ']' (93) 6 12
+    error (256)
+    disp_token (258) 3
+    size_token (259) 4
+    sabiranje_token (260) 7
+    mnozenje_token (261) 8
+    broj_token <broj_type> (262) 13 14
+    id_token <string_type> (263) 5 9
+
+
+Nonterminals, with rules where they appear
+
+    $accept (17)
+        on left: 0
+    Program (18)
+        on left: 1 2
+        on right: 0 1
+    Naredba (19)
+        on left: 3 4 5
+        on right: 1 2
+    E <matrica_type> (20)
+        on left: 6 7 8 9
+        on right: 3 4 5 7 8
+    lista_vektora <matrica_type> (21)
+        on left: 10 11
+        on right: 6 10
+    vektor <m_vector_type> (22)
+        on left: 12
+        on right: 10 11
+    niz_brojeva <m_vector_type> (23)
+        on left: 13 14
+        on right: 12 13
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    disp_token  shift, and go to state 1
+    size_token  shift, and go to state 2
+    id_token    shift, and go to state 3
+
+    Program  go to state 4
+    Naredba  go to state 5
+
+
+State 1
+
+    3 Naredba: disp_token . '(' E ')'
+
+    '('  shift, and go to state 6
+
+
+State 2
+
+    4 Naredba: size_token . '(' E ')'
+
+    '('  shift, and go to state 7
+
+
+State 3
+
+    5 Naredba: id_token . '=' E
+
+    '='  shift, and go to state 8
+
+
+State 4
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 9
+
+
+State 5
+
+    1 Program: Naredba . '\n' Program
+    2        | Naredba . '\n'
+
+    '\n'  shift, and go to state 10
+
+
+State 6
+
+    3 Naredba: disp_token '(' . E ')'
+
+    id_token  shift, and go to state 11
+    '['       shift, and go to state 12
+
+    E  go to state 13
+
+
+State 7
+
+    4 Naredba: size_token '(' . E ')'
+
+    id_token  shift, and go to state 11
+    '['       shift, and go to state 12
+
+    E  go to state 14
+
+
+State 8
+
+    5 Naredba: id_token '=' . E
+
+    id_token  shift, and go to state 11
+    '['       shift, and go to state 12
+
+    E  go to state 15
+
+
+State 9
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 10
+
+    1 Program: Naredba '\n' . Program
+    2        | Naredba '\n' .
+
+    disp_token  shift, and go to state 1
+    size_token  shift, and go to state 2
+    id_token    shift, and go to state 3
+
+    $default  reduce using rule 2 (Program)
+
+    Program  go to state 16
+    Naredba  go to state 5
+
+
+State 11
+
+    9 E: id_token .
+
+    $default  reduce using rule 9 (E)
+
+
+State 12
+
+    6 E: '[' . lista_vektora ']'
+
+    '['  shift, and go to state 17
+
+    lista_vektora  go to state 18
+    vektor         go to state 19
+
+
+State 13
+
+    3 Naredba: disp_token '(' E . ')'
+    7 E: E . sabiranje_token E
+    8  | E . mnozenje_token E
+
+    sabiranje_token  shift, and go to state 20
+    mnozenje_token   shift, and go to state 21
+    ')'              shift, and go to state 22
+
+
+State 14
+
+    4 Naredba: size_token '(' E . ')'
+    7 E: E . sabiranje_token E
+    8  | E . mnozenje_token E
+
+    sabiranje_token  shift, and go to state 20
+    mnozenje_token   shift, and go to state 21
+    ')'              shift, and go to state 23
+
+
+State 15
+
+    5 Naredba: id_token '=' E .
+    7 E: E . sabiranje_token E
+    8  | E . mnozenje_token E
+
+    sabiranje_token  shift, and go to state 20
+    mnozenje_token   shift, and go to state 21
+
+    $default  reduce using rule 5 (Naredba)
+
+
+State 16
+
+    1 Program: Naredba '\n' Program .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 17
+
+   12 vektor: '[' . niz_brojeva ']'
+
+    broj_token  shift, and go to state 24
+
+    niz_brojeva  go to state 25
+
+
+State 18
+
+    6 E: '[' lista_vektora . ']'
+   10 lista_vektora: lista_vektora . ';' vektor
+
+    ']'  shift, and go to state 26
+    ';'  shift, and go to state 27
+
+
+State 19
+
+   11 lista_vektora: vektor .
+
+    $default  reduce using rule 11 (lista_vektora)
+
+
+State 20
+
+    7 E: E sabiranje_token . E
+
+    id_token  shift, and go to state 11
+    '['       shift, and go to state 12
+
+    E  go to state 28
+
+
+State 21
+
+    8 E: E mnozenje_token . E
+
+    id_token  shift, and go to state 11
+    '['       shift, and go to state 12
+
+    E  go to state 29
+
+
+State 22
+
+    3 Naredba: disp_token '(' E ')' .
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 23
+
+    4 Naredba: size_token '(' E ')' .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 24
+
+   14 niz_brojeva: broj_token .
+
+    $default  reduce using rule 14 (niz_brojeva)
+
+
+State 25
+
+   12 vektor: '[' niz_brojeva . ']'
+   13 niz_brojeva: niz_brojeva . ',' broj_token
+
+    ']'  shift, and go to state 30
+    ','  shift, and go to state 31
+
+
+State 26
+
+    6 E: '[' lista_vektora ']' .
+
+    $default  reduce using rule 6 (E)
+
+
+State 27
+
+   10 lista_vektora: lista_vektora ';' . vektor
+
+    '['  shift, and go to state 17
+
+    vektor  go to state 32
+
+
+State 28
+
+    7 E: E . sabiranje_token E
+    7  | E sabiranje_token E .
+    8  | E . mnozenje_token E
+
+    mnozenje_token  shift, and go to state 21
+
+    $default  reduce using rule 7 (E)
+
+
+State 29
+
+    7 E: E . sabiranje_token E
+    8  | E . mnozenje_token E
+    8  | E mnozenje_token E .
+
+    $default  reduce using rule 8 (E)
+
+
+State 30
+
+   12 vektor: '[' niz_brojeva ']' .
+
+    $default  reduce using rule 12 (vektor)
+
+
+State 31
+
+   13 niz_brojeva: niz_brojeva ',' . broj_token
+
+    broj_token  shift, and go to state 33
+
+
+State 32
+
+   10 lista_vektora: lista_vektora ';' vektor .
+
+    $default  reduce using rule 10 (lista_vektora)
+
+
+State 33
+
+   13 niz_brojeva: niz_brojeva ',' broj_token .
+
+    $default  reduce using rule 13 (niz_brojeva)

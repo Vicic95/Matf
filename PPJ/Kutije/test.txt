@@ -1,0 +1,6 @@
+kutija B(7) = [ 3.2, 7 ] ;
+kutija A(4);
+prazna(A) ;
+puna(B);
+prikazi(B);
+prazna(C)

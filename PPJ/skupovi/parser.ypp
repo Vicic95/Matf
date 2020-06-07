@@ -1,0 +1,103 @@
+%{
+#include <iostream>
+#include <string>
+#include <set>
+#include <map>
+#include "zadatak.hpp"
+
+extern int yylex();
+
+void yyerror(std::string s){
+    std::cerr << "Sintaksna greska " << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+
+std::map <std::string, Skup*> tablica;
+%}
+
+%union {
+    std::string* string_type;
+    int broj_type;
+    Skup* m_set_type;
+}
+
+%token print_token tt_token unija_token presek_token razlika_token check_token card_token
+%token <broj_type> broj_token
+%token <string_type> id_token
+
+%type <m_set_type> E niz_koeficijenata
+%left unija_token presek_token
+%left razlika_token
+%%
+Program: Naredba ';' Program {}
+    | Naredba ';' {}
+    ;
+Naredba: print_token E {
+        $2->stampaj();
+    }
+    | id_token '=' E {
+        auto it = tablica.find(*$1);
+        if(it != tablica.end())
+            delete it->second;
+        tablica[*$1] = $3;
+        
+        delete $1;
+    }
+    | check_token broj_token ':' E {
+        if($4->sadrzi($2))
+            std::cout << "True" << std::endl;
+        else
+            std::cout << "False" << std::endl;
+    }
+    | check_token E '<' E {
+        if($2->podskup(*$4))
+            std::cout << "True" << std::endl;
+        else
+            std::cout << "False" << std::endl;
+    }
+    | card_token E {
+        std::cout << $2->velicina() << std::endl;
+    }
+    ;
+E: '{' niz_koeficijenata '}' {
+        $$ = $2;
+    }
+    |  broj_token tt_token broj_token {
+        $$ = new Skup($1,$3);
+    }
+    | E unija_token E {
+        $$ = unija(*$1,*$3);
+    }
+    | E razlika_token E {
+        $$ = razlika(*$1,*$3);
+    }
+    | E presek_token E {
+        $$ = presek(*$1,*$3);
+    }
+    | id_token {
+        auto it = tablica.find(*$1);
+        if(it == tablica.end()){
+            std::cerr << "Promenljiva nije definisana" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        else
+            $$ = new Skup(*(it->second));
+            
+        delete $1;
+    }
+    ;
+niz_koeficijenata: niz_koeficijenata ',' broj_token {
+        $$ = $1;
+        $$->dodaj($3);
+    }
+    | broj_token {
+        $$ = new Skup();
+        $$->dodaj($1);
+    }
+    ;    
+%%
+int main() {
+    yyparse();
+    
+    return 0;
+}

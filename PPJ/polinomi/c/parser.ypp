@@ -1,0 +1,97 @@
+%{
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <map>
+#include "poli.hpp"
+
+extern int yylex();
+
+void yyerror(std::string s){
+    std::cerr << "Sintaksna greska" << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+
+std::map<std::string, Polinom*> tablica;
+%}
+
+%union{
+    double d_vrednost;
+    std::string* s;
+    Polinom* p_vrednost;
+}
+
+%token <d_vrednost> br_token
+%token <s> id_token
+%type <p_vrednost> NizKoeficijenata polinom
+
+%left '+' '-'
+%left '*'
+%nonassoc UNMIN
+
+%%
+Program: Naredba '\n' Program {}
+    | Naredba '\n' {}
+    ;
+Naredba: polinom { $1->ispisi();
+    delete $1;
+    }
+    | id_token ':' '=' polinom {
+        tablica[*$1] = $4;
+        
+    }
+    | polinom '=' '=' polinom {
+        if($1->jednak(*$4))
+            std::cout << "True" << std::endl;
+        else
+            std::cout << "False" << std::endl;
+        
+    }
+    | polinom '!' '=' polinom {
+        if($1->jednak(*$4))
+            std::cout << "False" << std::endl;
+        else
+            std::cout << "True" << std::endl;
+    }
+    ;
+polinom: '<' NizKoeficijenata '>' { $$ = $2;
+    }
+    | polinom '+' polinom { $$=saberi(*$1,*$3);
+    delete $1;
+    delete $3;
+    }
+    | polinom '-' polinom { $$=oduzmi(*$1,*$3);
+    delete $1;
+    delete $3;
+    }
+    | polinom '*' polinom { $$=pomnozi(*$1,*$3);
+    delete $1;
+    delete $3;
+    }
+    | '-' polinom %prec UNMIN { $$=uminus(*$2);
+    delete $2;
+    }
+    | '(' polinom ')' { $$ = $2;
+    }
+    | id_token {
+        auto it = tablica.find(*$1);
+        if(it!=tablica.end())
+            $$ = new Polinom(it->second->getKoef());
+        else
+            yyerror("promenljiva je nepoznata");
+    }
+    ;
+NizKoeficijenata: NizKoeficijenata ',' br_token { $$ = $1;
+    $$->dodaj($3);
+    }
+    | br_token { $$ = new Polinom();
+    $$->dodaj($1);
+    }
+    ;
+
+%%
+int main(){
+    yyparse();
+    
+    return 0;
+}
